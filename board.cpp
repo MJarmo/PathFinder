@@ -73,14 +73,14 @@ void Board::moveUp()
 {
 	boy_moves.push(m_Boy);
 	--m_Boy.m_X;
-	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '@';
+	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '&';
 }
 
 void Board::moveDown()
 {
 	boy_moves.push(m_Boy);
 	++m_Boy.m_X;
-	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '@';
+	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '&';
 }
 
 void Board::moveRight()
@@ -88,14 +88,14 @@ void Board::moveRight()
 	boy_moves.push(m_Boy);
 	m_LastPoint = m_Boy;
 	++m_Boy.m_Y;
-	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '@';
+	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '&';
 }
 
 void Board::moveLeft()
 {
 	boy_moves.push(m_Boy);
 	--m_Boy.m_Y;
-	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '@';
+	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '&';
 }
 
 bool Board::findPath()
@@ -116,22 +116,22 @@ bool Board::findPath()
 		{
 			if (xDiff > 0) //preferably move from from top to bot
 			{
-				if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
 				{
 					moveDown();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
+				else if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
 				{
 					moveUp();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
@@ -139,22 +139,22 @@ bool Board::findPath()
 			}
 			else //preferably move from bottom to top
 			{
-				if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
+				if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
 				{
 					moveUp();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
 				{
 					moveDown();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
@@ -165,22 +165,22 @@ bool Board::findPath()
 		{
 			if (yDiff > 0) //preferably move from left to right
 			{
-				if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
 				{
 					moveUp();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
 				{
 					moveDown();
 					goBack = false;
@@ -188,22 +188,22 @@ bool Board::findPath()
 			}
 			else //preferably move from right to left
 			{
-				if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
 				{
 					moveUp();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] & '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
 				{
 					moveDown();
 					goBack = false;
@@ -211,7 +211,7 @@ bool Board::findPath()
 			}
 		}
 		printMap();
-		Sleep(200);
+		//Sleep(200);
 		if (goBack)
 		{
 			m_Boy = boy_moves.top();
@@ -223,10 +223,25 @@ bool Board::findPath()
 		}
 	}
 
-
-
 return true;
 
+}
 
-
+void Board::printStepsMade()
+{
+	for(int i = 0; i < MAPSIZEX; ++i)
+	{
+		for(int j = 0; j < MAPSIZEY ;++j)
+		{
+			if(i == m_Boy.m_X && j == m_Boy.m_Y)
+			{
+				std::cout<<"B";
+			}
+			else
+			{
+				std::cout<<stepsMade[i][j] ;
+			}
+		}
+		std::cout<<std::endl;
+	}
 }

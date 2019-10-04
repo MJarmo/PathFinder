@@ -27,11 +27,13 @@ public:
 	Board(char array[MAPSIZEX][MAPSIZEY]);
 	bool findStartEnd();
 	void printMap();
+	void printStepsMade();
 	bool findPath();
 	void moveUp();
 	void moveDown();
 	void moveRight();
 	void moveLeft();
+	void bfs();
 ;
 };
 

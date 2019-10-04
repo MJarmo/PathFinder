@@ -44,6 +44,7 @@ int main() {
 		b.findStartEnd();
 		b.findPath();
 		cout<<b.stepsCnt;
+		b.printStepsMade();
 //		while(mainB)
 //		{
 //			cin>>p;
