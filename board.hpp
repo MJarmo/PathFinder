@@ -32,22 +32,24 @@ public:
 	std::list<POI> move_list;
 	POI current;
 	char optimalizationMap [MAPSIZEX][MAPSIZEY];
-
+	void rmoveUp();
+	void rmoveDown();
+	void rmoveRight();
+	void rmoveLeft();
 
 	Board(char array[MAPSIZEX][MAPSIZEY]);
-	bool findStartEnd();
+	bool findStartEnd(bool flag);
 	void printMap();
 	void printStepsMade();
-	void printDFSSteps();
 	bool findPath();
 	void moveUp();
 	void moveDown();
 	void moveRight();
 	void moveLeft();
-	bool dfs(POI poi);
-	void optymizePath(POI p);
+	void removeDeathEnds();
 	void checkForDeadEnds();
-
+	void cleanMap();
+	void reverseFindPath();
 };
 
 

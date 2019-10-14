@@ -41,12 +41,21 @@ int main() {
 		bool mainB = true;
 		int p = 0;
 		Board b(worldMap);
-		b.findStartEnd();
+		b.findStartEnd(true);
+		b.printStepsMade();
+
 		b.findPath();
+		b.printStepsMade();
+		cout<<b.stepsCnt<<endl;
+
+		b.findStartEnd(false);
+		cout<<b.stepsCnt<<endl;
+		b.printStepsMade();
+
+		b.reverseFindPath();
 		//b.printDFSSteps();
 		cout<<b.stepsCnt<<endl;
 		b.printStepsMade();
-b.checkForDeadEnds();
 //		while(mainB)
 //		{
 //			cin>>p;
