@@ -13,12 +13,14 @@
 Board::Board(char array[MAPSIZEX][MAPSIZEY])
 {
 	stepsCnt = 0;
+	cnt = 0;
 	for(int i = 0; i < MAPSIZEX; ++i)
 	{
 		for(int j = 0; j < MAPSIZEY ;++j)
 		{
 			mapArray[i][j] = array[i][j];
 			stepsMade[i][j] = array[i][j];
+			optimalizationMap[i][j] = array[i][j];
 		}
 	}
 }
@@ -97,7 +99,36 @@ void Board::moveLeft()
 	--m_Boy.m_Y;
 	stepsMade[m_Boy.m_X][m_Boy.m_Y] = '&';
 }
+void Board::checkForDeadEnds()
+{
+	while(!boy_moves.empty())
+	{
+		optimalizationMap[boy_moves.top().m_X][boy_moves.top().m_Y] = '+';
+		boy_moves.pop();
+	}
+	optimalizationMap[m_Start.m_X][m_Start.m_Y] = '$';
 
+	for(int i = 0; i < MAPSIZEX; ++i)
+	{
+		for(int j = 0; j < MAPSIZEY ;++j)
+		{
+			if(i == m_Boy.m_X && j == m_Boy.m_Y)
+			{
+				std::cout<<"B";
+			}
+			else
+			{
+				std::cout<<optimalizationMap[i][j];
+			}
+		}
+		std::cout<<std::endl;
+	}
+}
+void Board::optymizePath(POI p)
+{
+	++cnt;
+	current = p;
+}
 bool Board::findPath()
 {
 	int xDiff = m_End.m_X - m_Start.m_X;
@@ -116,47 +147,84 @@ bool Board::findPath()
 		{
 			if (xDiff > 0) //preferably move from from top to bot
 			{
-				if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
 				{
 					moveDown();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if (yDiff > 0) //preferably move from left to right
 				{
-					moveRight();
-					goBack = false;
+					if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+					{
+						moveRight();
+						goBack = false;
+					}
+					else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+					{
+						moveLeft();
+						goBack = false;
+					}
 				}
-				else if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
+				else if (yDiff <= 0) //preferably move from right to left
+				{
+					if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+					{
+						moveLeft();
+						goBack = false;
+					}
+					else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+					{
+						moveRight();
+						goBack = false;
+					}
+				}
+				if (goBack && '@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
 				{
 					moveUp();
-					goBack = false;
-				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
-				{
-					moveLeft();
 					goBack = false;
 				}
 			}
 			else //preferably move from bottom to top
 			{
-				if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
+				if ('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move Up
 				{
 					moveUp();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if (yDiff>0)
 				{
-					moveRight();
-					goBack = false;
+					if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+					{
+						moveRight();
+						goBack = false;
+					}
+					else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+					{
+						moveLeft();
+						goBack = false;
+					}
 				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				else if (yDiff <= 0)
 				{
-					moveDown();
-					goBack = false;
+					if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+					{
+						moveLeft();
+						goBack = false;
+					}
+					else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+					{
+						moveRight();
+						goBack = false;
+					}
 				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
+					goBack = false;
+				}
+				if (goBack && '@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+				{
+					moveDown();
 					goBack = false;
 				}
 			}
@@ -165,51 +233,86 @@ bool Board::findPath()
 		{
 			if (yDiff > 0) //preferably move from left to right
 			{
-				if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+				else if (xDiff > 0)
 				{
-					moveUp();
-					goBack = false;
+					if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+					{
+						moveDown();
+						goBack = false;
+					}
+					else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+					{
+						moveUp();
+						goBack = false;
+					}
 				}
-				else if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				else if (xDiff <= 0)
+				{
+					if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+					{
+						moveUp();
+						goBack = false;
+					}
+					else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+					{
+						moveDown();
+						goBack = false;
+					}
+				}
+				if (goBack && '@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
 				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
-				{
-					moveDown();
-					goBack = false;
-				}
+
+
 			}
 			else //preferably move from right to left
 			{
-				if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
+				if ('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y-1]) // move Left
 				{
 					moveLeft();
 					goBack = false;
 				}
-				else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+				else if (xDiff > 0)
 				{
-					moveUp();
-					goBack = false;
+					if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+					{
+						moveDown();
+						goBack = false;
+					}
+					else if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+					{
+						moveUp();
+						goBack = false;
+					}
 				}
-				else if('@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] & '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
+				else if (xDiff <= 0)
+				{
+					if('@' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X-1][m_Boy.m_Y]) // move up
+					{
+						moveUp();
+						goBack = false;
+					}
+					else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '$' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
+					{
+						moveDown();
+						goBack = false;
+					}
+				}
+				if(goBack && '@' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '&' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1] && '$' != stepsMade[m_Boy.m_X][m_Boy.m_Y+1]) //move Right
 				{
 					moveRight();
-					goBack = false;
-				}
-				else if ('@' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y] && '&' != stepsMade[m_Boy.m_X+1][m_Boy.m_Y]) // move Down
-				{
-					moveDown();
 					goBack = false;
 				}
 			}
 		}
+		std::cout <<"xDiff:" << xDiff<< " yDiff:"<<yDiff<<std::endl;
 		printMap();
 		//Sleep(200);
 		if (goBack)
