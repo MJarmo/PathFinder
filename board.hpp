@@ -36,7 +36,7 @@ public:
 	void rmoveDown();
 	void rmoveRight();
 	void rmoveLeft();
-
+	void printFinalPath();
 	Board(char array[MAPSIZEX][MAPSIZEY]);
 	bool findStartEnd(bool flag);
 	void printMap();
@@ -47,7 +47,6 @@ public:
 	void moveRight();
 	void moveLeft();
 	void removeDeathEnds();
-	void checkForDeadEnds();
 	void cleanMap();
 	void reverseFindPath();
 };
