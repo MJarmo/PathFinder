@@ -59,28 +59,28 @@ int main() {
 		b.sqr_delete();
 		b.printStepsMade();
 
-		while(mainB)
-		{
-			cin>>p;
-			switch (p)
-			{
-			case 1:
-			{
-				b.printMap();
-				break;
-			}
-			case 2:
-			{
-				b.findStartEnd();
-				b.findPath(); // my algo. Rating: 3,6/10 not great, not terrible
-				break;}
-			case 3:
-			{
-
-				break;
-			}
-			}
-		}
+//		while(mainB)
+//		{
+//			cin>>p;
+//			switch (p)
+//			{
+//			case 1:
+//			{
+//				b.printMap();
+//				break;
+//			}
+//			case 2:
+//			{
+//				b.findStartEnd();
+//				b.findPath(); // my algo. Rating: 3,6/10 not great, not terrible
+//				break;}
+//			case 3:
+//			{
+//
+//				break;
+//			}
+//			}
+//		}
 
 
 
