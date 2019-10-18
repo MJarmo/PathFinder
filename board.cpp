@@ -93,7 +93,7 @@ void Board::printStepsMade()
 		{
 			if(i == m_Boy.m_X && j == m_Boy.m_Y)
 			{
-				std::cout<<"B";
+				std::cout<<stepsMade[i][j];
 			}
 			else
 			{
@@ -112,7 +112,7 @@ void Board::printMap()
 		{
 			if(i == m_Boy.m_X && j == m_Boy.m_Y)
 			{
-				std::cout<<"B";
+				std::cout<<stepsMade[i][j];
 			}
 			else
 			{
@@ -554,7 +554,6 @@ bool Board::findPath()
 			t = false;
 		}
 	}
-	this->removeDeathEnds();
 	return true;
 
 }
@@ -770,6 +769,9 @@ void Board::reverseFindPath()
 			t = false;
 		}
 	}
+	POI tmp = m_Start;
+	m_Start = m_End;
+	m_End = tmp;
 }
 
 

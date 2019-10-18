@@ -16,7 +16,7 @@ using namespace std;
 		{'@',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','@'},
 		{'@',' ',' ',' ',' ',' ',' ',' ',' ','@',' ',' ',' ',' ','@'},
 		{'@',' ',' ',' ',' ',' ',' ',' ',' ','@',' ',' ',' ',' ','@'},
-		{'@',' ',' ',' ',' ',' ',' ','@',' ','@',' ',' ',' ',' ','@'},
+		{'@',' ',' ',' ',' ',' ',' ','@',' ','@','@',' ',' ',' ','@'},
 		{'@',' ','@','@','@','@','@','@',' ','@',' ',' ',' ',' ','@'},
 		{'@',' ',' ',' ',' ',' ',' ','@',' ','@','@','@',' ',' ','@'},
 		{'@','@',' ',' ','@','@','@','@','@',' ','$','@',' ',' ','@'},
@@ -30,60 +30,79 @@ using namespace std;
 
 
 
-int main() {
-		cout<<"##############################################"<<endl;
-		cout<<"############WELCOME IN PATH FINDER############"<<endl;
-		cout<<"##############################################"<<endl;
-		cout<<"What would you like to do?"<<endl;
-		cout<<"1.Print map"<<endl;
-		cout<<"2.Find Path"<<endl;
-		cout<<"3.Exit"<<endl;
+   int main() {
+	   cout<<"##############################################"<<endl;
+	   cout<<"############WELCOME IN PATH FINDER############"<<endl;
+	   cout<<"##############################################"<<endl;
 
-		Board b(worldMap);
-		b.findStartEnd(true);
-		b.printStepsMade();
+	   bool menu = true;
+	   int p;
 
-		b.findPath();
-		b.printStepsMade();
-		//cout<<b.stepsCnt<<endl;
+	   while(menu)
+	   {
+		   cout<<"What would you like to do?"<<endl;
+		   cout<<"1.Print map"<<endl;
+		   cout<<"2.Find Path"<<endl;
+		   cout<<"3.Find Path, print every step"<<endl;
+		   cout<<"4.Exit"<<endl;
 
-		b.findStartEnd(false);
-		//cout<<b.stepsCnt<<endl;
-		b.printStepsMade();
+		   Board b(worldMap);
 
-		b.reverseFindPath();
-		//b.printDFSSteps();
-		//cout<<b.stepsCnt<<endl;
-		b.printFinalPath();
-		b.printStepsMade();
-		b.sqr_delete();
-		b.printStepsMade();
+		   cin>>p;
+		   switch (p)
+		   {
+		   case 1:
+		   {
+			   b.printMap();
+			   break;
+		   }
+		   case 2:
+		   {
+			   b.findStartEnd(true);
+			   b.findPath();
+			   b.removeDeathEnds();
+			   b.findStartEnd(false);
 
-//		while(mainB)
-//		{
-//			cin>>p;
-//			switch (p)
-//			{
-//			case 1:
-//			{
-//				b.printMap();
-//				break;
-//			}
-//			case 2:
-//			{
-//				b.findStartEnd();
-//				b.findPath(); // my algo. Rating: 3,6/10 not great, not terrible
-//				break;}
-//			case 3:
-//			{
-//
-//				break;
-//			}
-//			}
-//		}
+			   b.reverseFindPath();
+			   b.printFinalPath();
+
+			   b.sqr_delete();
+			   b.printStepsMade();
+			   break;
+		   }
+		   case 3:
+		   {
+			   b.findStartEnd(true);
+			   cout<<"Empty Map"<<endl;
+			   b.printMap();
+			   b.findPath();
+			   cout<<"First walk throu map"<<endl;
+			   b.printStepsMade();
+			   b.removeDeathEnds();
+			   cout<<"Remove of dead ends"<<endl;
+			   b.printStepsMade();
+
+			   b.findStartEnd(false);
+			   b.reverseFindPath();
+			   b.printFinalPath();
+			   cout<<"Walk from end to begin"<<endl;
+			   b.printStepsMade();
+
+			   b.sqr_delete();
+			   cout<<"Deleting squares"<<endl;
+			   b.printStepsMade(); // my algo. Rating: 3,6 not great, not terrible
+			   break;
+		   }
+		   case 4:
+		   {
+			   menu = false;
+			   break;
+		   }
+		   }
+	   }
 
 
 
 
-			return 0;
-}
+	   return 0;
+   }
