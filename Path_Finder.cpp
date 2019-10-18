@@ -21,11 +21,11 @@ using namespace std;
 		{'@',' ',' ',' ',' ',' ',' ','@',' ','@','@','@',' ',' ','@'},
 		{'@','@',' ',' ','@','@','@','@','@',' ','$','@',' ',' ','@'},
 		{'@',' ','@',' ',' ',' ',' ','@','@',' ','@','#',' ',' ','@'},
-		{'@',' ','@','@','@','@',' ','@',' ',' ','@','@','@','@','@'},
+		{'@',' ','@','@','@','@',' ','@',' ',' ','@','@',' ','@','@'},
 		{'@',' ','@',' ',' ',' ',' ','@',' ',' ','@',' ',' ',' ','@'},
 		{'@',' ','@',' ',' ',' ',' ','@',' ',' ','@',' ',' ',' ','@'},
 		{'@',' ','@',' ',' ',' ',' ',' ',' ','@',' ',' ',' ',' ','@'},
-		{'@',' ',' ',' ',' ',' ',' ',' ',' ','@',' ',' ',' ',' ','@'},
+		{'@',' ',' ',' ',' ',' ',' ',' ','@',' ',' ',' ',' ',' ','@'},
 		{'@','@','@','@','@','@','@','@','@','@','@','@','@','@','@'}};
 
 
@@ -38,47 +38,49 @@ int main() {
 		cout<<"1.Print map"<<endl;
 		cout<<"2.Find Path"<<endl;
 		cout<<"3.Exit"<<endl;
-		bool mainB = true;
-		int p = 0;
+
 		Board b(worldMap);
 		b.findStartEnd(true);
 		b.printStepsMade();
 
 		b.findPath();
 		b.printStepsMade();
-		cout<<b.stepsCnt<<endl;
+		//cout<<b.stepsCnt<<endl;
 
 		b.findStartEnd(false);
-		cout<<b.stepsCnt<<endl;
+		//cout<<b.stepsCnt<<endl;
 		b.printStepsMade();
 
 		b.reverseFindPath();
 		//b.printDFSSteps();
-		cout<<b.stepsCnt<<endl;
+		//cout<<b.stepsCnt<<endl;
 		b.printFinalPath();
 		b.printStepsMade();
-//		while(mainB)
-//		{
-//			cin>>p;
-//			switch (p)
-//			{
-//			case 1:
-//			{
-//				b.printMap();
-//				break;
-//			}
-//			case 2:
-//			{
-//				b.findStartEnd();
-//				b.findPath(); // my algo. Rating: 3,6/10 not great, not terrible
-//				break;}
-//			case 3:
-//			{
-//
-//				break;
-//			}
-//			}
-//		}
+		b.sqr_delete();
+		b.printStepsMade();
+
+		while(mainB)
+		{
+			cin>>p;
+			switch (p)
+			{
+			case 1:
+			{
+				b.printMap();
+				break;
+			}
+			case 2:
+			{
+				b.findStartEnd();
+				b.findPath(); // my algo. Rating: 3,6/10 not great, not terrible
+				break;}
+			case 3:
+			{
+
+				break;
+			}
+			}
+		}
 
 
 

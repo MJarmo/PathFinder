@@ -7,7 +7,7 @@
 
 #ifndef POINT_OF_INTREST_HPP_
 #define POINT_OF_INTREST_HPP_
-
+#include <iostream>
 struct POI
 {
 	int m_X;
@@ -18,6 +18,10 @@ struct POI
 	{
 		m_X = x;
 		m_Y = y;
+	}
+	void printPoint()
+	{
+		std::cout<<"X: "<<this->m_X<<" Y: "<<this->m_Y<<std::endl;
 	}
 	bool operator==(POI p)
 	{

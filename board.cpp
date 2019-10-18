@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <windows.h>
+#include <vector>
 
 Board::Board(char array[MAPSIZEX][MAPSIZEY])
 {
@@ -20,7 +21,6 @@ Board::Board(char array[MAPSIZEX][MAPSIZEY])
 		{
 			mapArray[i][j] = array[i][j];
 			stepsMade[i][j] = array[i][j];
-			optimalizationMap[i][j] = array[i][j];
 		}
 	}
 }
@@ -205,12 +205,151 @@ void Board::removeDeathEnds()
 	stepsMade[m_End.m_X][m_End.m_Y] = '#';
 }
 
+bool Board::findSqrs()
+{
+	POI tmp;
+	bool retVal = false;
+	for(unsigned int i = 1; i < MAPSIZEX-1; ++i)
+	{
+		for(unsigned int j = 1; j < MAPSIZEY-1; ++j)
+		{
+			if (('+' == stepsMade[i+1][j] && '+' == stepsMade[i+1][j+1] && '+' == stepsMade[i][j+1] && '+' == stepsMade[i][j])
+			 || ('+' == stepsMade[i][j+1] && '+' == stepsMade[i-1][j+1] && '+' == stepsMade[i-1][j] && '+' == stepsMade[i][j])
+			 || ('+' == stepsMade[i-1][j] && '+' == stepsMade[i-1][j-1] && '+' == stepsMade[i][j-1] && '+' == stepsMade[i][j])
+			 || ('+' == stepsMade[i][j-1] && '+' == stepsMade[i+1][j-1] && '+' == stepsMade[i+1][j] && '+' == stepsMade[i][j]))
+			{
+				tmp.set(i,j);
+				sqr_fields.push_front(tmp);
+				retVal = true;
+			}
+		}
+	}
+	return retVal;
+}
+
+void Board::sqr_clean(POI c1, POI c4)
+{
+	for(int i = c1.m_X; i < c4.m_X ; ++i)
+	{
+		for(int j = c1.m_Y; j < c4.m_Y; ++j)
+		{
+			stepsMade[i][j] = ' ';
+		}
+	}
+	//printStepsMade();
+}
+
+void Board::sqr_FindSE()
+{
+	POI c1,c2,c3,c4;
+	bool loop = true;
+
+	while(!sqr_fields.empty()) //loop throu squares and find corners
+	{
+		c1 = sqr_fields.back(); //Top-Left Corner
+		sqr_fields.pop_back();
+		unsigned int y_cnt = c1.m_Y;
+		unsigned int x_cnt = c1.m_X;
+		POI tmp;
+		while(loop) //Top Right corner
+		{
+			if (!('+' == stepsMade[c1.m_X+1][y_cnt] && '+' == stepsMade[c1.m_X][y_cnt]))
+			{
+				c2.set(c1.m_X, --y_cnt);
+				loop = false;
+			}
+			++y_cnt;
+			if (y_cnt > MAPSIZEY+1)
+			{
+				std::cerr<<"sqr_FindSE some shit hit the fan"<<std::endl;
+				break;
+			}
+		}
+
+		loop = true;
+		while(loop) //Bottom Left Corner
+		{
+			if (!('+' == stepsMade[x_cnt][c2.m_Y] && '+' == stepsMade[x_cnt][c1.m_Y]))
+
+			{
+				c3.set(--x_cnt, c1.m_Y);
+				loop = false;
+			}
+			++x_cnt;
+			if (MAPSIZEY+1 < x_cnt)
+			{
+				std::cerr<<"sqr_FindSE some shit hit the fan"<<std::endl;
+				break;
+			}
+		}
+		c4.set(c3.m_X,c2.m_Y); // Bottom Right Corner
+
+//		c1.printPoint();
+//		c2.printPoint();
+//		c3.printPoint();
+//		c4.printPoint();
+
+		//delete sqr from list
+		for(int i = c1.m_X; i < c4.m_X ; ++i)
+		{
+			for(int j = c1.m_Y; j < c4.m_Y; ++j)
+			{
+				POI tmp;
+				tmp.set(i,j);
+				sqr_fields.remove(tmp);
+			}
+		}
+		sqr_clean(c1,c4);
+
+		//find start/end for small square
+//		std::vector<POI> SE;
+//		if ('+' == stepsMade[c1.m_X-1][c1.m_Y] || '+' == stepsMade[c1.m_X][c1.m_Y-1])
+//		{
+//			SE.push_back(c1);
+//		}
+//		if ('+' == stepsMade[c2.m_X-1][c2.m_Y] || '+' == stepsMade[c2.m_X][c2.m_Y+1])
+//		{
+//			SE.push_back(c2);
+//		}
+//		if ('+' == stepsMade[c3.m_X+1][c3.m_Y] || '+' == stepsMade[c3.m_X][c3.m_Y-1])
+//		{
+//			SE.push_back(c3);
+//		}
+//		if ('+' == stepsMade[c4.m_X+1][c4.m_Y] || '+' == stepsMade[c4.m_X][c4.m_Y+1])
+//		{
+//			SE.push_back(c4);
+//		}
+//		std::cout<<"Size of SE: "<<SE.size()<<std::endl;
+//		SE.at(0).printPoint();
+//		SE.at(1).printPoint();
+
+
+//		else
+//		{
+//			std::cerr<<"Didnt find correct nr of corners"<<std::endl;
+//		}
+
+		//findPath();
+		//printStepsMade();
+	}
+}
+void Board::sqr_delete()
+{
+	bool t = true;
+	while(t)
+	{
+		t = findSqrs();
+		sqr_FindSE();
+	}
+}
+
+
 bool Board::findPath()
 {
 	int xDiff = m_End.m_X - m_Start.m_X;
 	int yDiff = m_End.m_Y - m_Start.m_Y;
 	bool t = true;
-	m_LastPoint.set(m_Boy.m_X,m_Boy.m_Y);
+
 	bool goBack = true;
 
 	while(t)
@@ -403,8 +542,8 @@ bool Board::findPath()
 				}
 			}
 		}
-		printStepsMade();
-		Sleep(100);
+//		printStepsMade();
+//		Sleep(100);
 		if (goBack)
 		{
 			m_Boy = boy_moves.top();
@@ -618,8 +757,8 @@ void Board::reverseFindPath()
 
 			}
 		}
-		printStepsMade();
-		Sleep(100);
+//		printStepsMade();
+//		Sleep(100);
 		if (goBack)
 		{
 			m_Boy = boy_moves.top();

@@ -29,9 +29,11 @@ public:
 
 	//Optymalization Path
 	int cnt;
-	std::list<POI> move_list;
-	POI current;
-	char optimalizationMap [MAPSIZEX][MAPSIZEY];
+	std::list<POI> sqr_fields;
+	bool findSqrs();
+	void sqr_FindSE();
+	void sqr_clean(POI c1, POI c4);
+	void sqr_delete();
 	void rmoveUp();
 	void rmoveDown();
 	void rmoveRight();
