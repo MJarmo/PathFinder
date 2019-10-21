@@ -21,15 +21,13 @@ public:
 	POI m_End;
 	POI m_Boy;
 	POI m_LastPoint;
-	//My Algo
 	char mapArray[MAPSIZEX][MAPSIZEY];
-    char stepsMade[MAPSIZEX][MAPSIZEY];
-    int stepsCnt;
-    std::stack<POI> boy_moves;
-
-	//Optymalization Path
+	char stepsMade[MAPSIZEX][MAPSIZEY];
+	int stepsCnt;
+	std::stack<POI> boy_moves;
 	int cnt;
 	std::list<POI> sqr_fields;
+
 	bool findSqrs();
 	void sqr_FindSE();
 	void sqr_clean(POI c1, POI c4);
@@ -41,7 +39,6 @@ public:
 	void printFinalPath();
 	Board(char array[MAPSIZEX][MAPSIZEY]);
 	bool findStartEnd(bool flag);
-	void printMap();
 	void printStepsMade();
 	bool findPath();
 	void moveUp();

@@ -104,25 +104,6 @@ void Board::printStepsMade()
 	}
 }
 
-void Board::printMap()
-{
-	for(int i = 0; i < MAPSIZEX; ++i)
-	{
-		for(int j = 0; j < MAPSIZEY ;++j)
-		{
-			if(i == m_Boy.m_X && j == m_Boy.m_Y)
-			{
-				std::cout<<stepsMade[i][j];
-			}
-			else
-			{
-				std::cout<<mapArray[i][j] ;
-			}
-		}
-		std::cout<<std::endl;
-	}
-}
-
 void Board::printFinalPath()
 {
 	this->cleanMap();
@@ -214,9 +195,9 @@ bool Board::findSqrs()
 		for(unsigned int j = 1; j < MAPSIZEY-1; ++j)
 		{
 			if (('+' == stepsMade[i+1][j] && '+' == stepsMade[i+1][j+1] && '+' == stepsMade[i][j+1] && '+' == stepsMade[i][j])
-			 || ('+' == stepsMade[i][j+1] && '+' == stepsMade[i-1][j+1] && '+' == stepsMade[i-1][j] && '+' == stepsMade[i][j])
-			 || ('+' == stepsMade[i-1][j] && '+' == stepsMade[i-1][j-1] && '+' == stepsMade[i][j-1] && '+' == stepsMade[i][j])
-			 || ('+' == stepsMade[i][j-1] && '+' == stepsMade[i+1][j-1] && '+' == stepsMade[i+1][j] && '+' == stepsMade[i][j]))
+					|| ('+' == stepsMade[i][j+1] && '+' == stepsMade[i-1][j+1] && '+' == stepsMade[i-1][j] && '+' == stepsMade[i][j])
+					|| ('+' == stepsMade[i-1][j] && '+' == stepsMade[i-1][j-1] && '+' == stepsMade[i][j-1] && '+' == stepsMade[i][j])
+					|| ('+' == stepsMade[i][j-1] && '+' == stepsMade[i+1][j-1] && '+' == stepsMade[i+1][j] && '+' == stepsMade[i][j]))
 			{
 				tmp.set(i,j);
 				sqr_fields.push_front(tmp);
@@ -236,7 +217,6 @@ void Board::sqr_clean(POI c1, POI c4)
 			stepsMade[i][j] = ' ';
 		}
 	}
-	//printStepsMade();
 }
 
 void Board::sqr_FindSE()
@@ -282,12 +262,8 @@ void Board::sqr_FindSE()
 				break;
 			}
 		}
-		c4.set(c3.m_X,c2.m_Y); // Bottom Right Corner
 
-//		c1.printPoint();
-//		c2.printPoint();
-//		c3.printPoint();
-//		c4.printPoint();
+		c4.set(c3.m_X,c2.m_Y); // Bottom Right Corner
 
 		//delete sqr from list
 		for(int i = c1.m_X; i < c4.m_X ; ++i)
@@ -300,39 +276,9 @@ void Board::sqr_FindSE()
 			}
 		}
 		sqr_clean(c1,c4);
-
-		//find start/end for small square
-//		std::vector<POI> SE;
-//		if ('+' == stepsMade[c1.m_X-1][c1.m_Y] || '+' == stepsMade[c1.m_X][c1.m_Y-1])
-//		{
-//			SE.push_back(c1);
-//		}
-//		if ('+' == stepsMade[c2.m_X-1][c2.m_Y] || '+' == stepsMade[c2.m_X][c2.m_Y+1])
-//		{
-//			SE.push_back(c2);
-//		}
-//		if ('+' == stepsMade[c3.m_X+1][c3.m_Y] || '+' == stepsMade[c3.m_X][c3.m_Y-1])
-//		{
-//			SE.push_back(c3);
-//		}
-//		if ('+' == stepsMade[c4.m_X+1][c4.m_Y] || '+' == stepsMade[c4.m_X][c4.m_Y+1])
-//		{
-//			SE.push_back(c4);
-//		}
-//		std::cout<<"Size of SE: "<<SE.size()<<std::endl;
-//		SE.at(0).printPoint();
-//		SE.at(1).printPoint();
-
-
-//		else
-//		{
-//			std::cerr<<"Didnt find correct nr of corners"<<std::endl;
-//		}
-
-		//findPath();
-		//printStepsMade();
 	}
 }
+
 void Board::sqr_delete()
 {
 	bool t = true;
@@ -342,7 +288,6 @@ void Board::sqr_delete()
 		sqr_FindSE();
 	}
 }
-
 
 bool Board::findPath()
 {
@@ -403,7 +348,6 @@ bool Board::findPath()
 						goBack = false;
 					}
 				}
-
 			}
 			else //preferably move to top
 			{
@@ -542,8 +486,6 @@ bool Board::findPath()
 				}
 			}
 		}
-//		printStepsMade();
-//		Sleep(100);
 		if (goBack)
 		{
 			m_Boy = boy_moves.top();
@@ -555,7 +497,6 @@ bool Board::findPath()
 		}
 	}
 	return true;
-
 }
 
 void Board::reverseFindPath()
@@ -661,7 +602,6 @@ void Board::reverseFindPath()
 						goBack = false;
 					}
 				}
-
 			}
 		}
 		else //move right/left
@@ -756,8 +696,6 @@ void Board::reverseFindPath()
 
 			}
 		}
-//		printStepsMade();
-//		Sleep(100);
 		if (goBack)
 		{
 			m_Boy = boy_moves.top();
