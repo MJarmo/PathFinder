@@ -42,8 +42,9 @@ using namespace std;
 	   {
 		   cout<<"What would you like to do?"<<endl;
 		   cout<<"1.Print map"<<endl;
-		   cout<<"2.Find Path"<<endl;
+		   cout<<"2.Find Path"<<endl; // My algo
 		   cout<<"3.Find Path, print every step"<<endl;
+		   // Find Path using DFS
 		   cout<<"4.Exit"<<endl;
 
 		   Board b(worldMap);
